@@ -255,12 +255,13 @@ export function ExpenseForm({
               control={form.control}
               name="title"
               render={({ field }) => (
+                
+                // Description
                 <FormItem className="">
-                  <FormLabel>Expense title</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Monday evening restaurant"
-                      className="text-base"
+                      placeholder="Enter a description"
+                      className="text-4xl h-16"
                       {...field}
                       onBlur={async () => {
                         field.onBlur() // avoid skipping other blur event listeners since we overwrite `field`
@@ -275,9 +276,6 @@ export function ExpenseForm({
                       }}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Enter a description for the expense.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -287,14 +285,16 @@ export function ExpenseForm({
               control={form.control}
               name="amount"
               render={({ field: { onChange, ...field } }) => (
+
+                // Amount
                 <FormItem className="sm:order-3">
-                  <FormLabel>Amount</FormLabel>
                   <div className="flex items-baseline gap-2">
-                    <span>{group.currency}</span>
+                    <span className='text-4xl'>{group.currency}</span>
                     <FormControl>
                       <Input
                         {...field}
-                        className="text-base max-w-[120px]"
+                        // className="text-base max-w-[120px]"
+                        className="text-4xl h-16"
                         type="text"
                         inputMode="decimal"
                         step={0.01}
@@ -313,7 +313,7 @@ export function ExpenseForm({
                     control={form.control}
                     name="isReimbursement"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row gap-2 items-center space-y-0 pt-2">
+                      <FormItem className="flex flex-row gap-2 items-center space-y-0 pt-2 hidden">
                         <FormControl>
                           <Checkbox
                             checked={field.value}
@@ -333,26 +333,26 @@ export function ExpenseForm({
               control={form.control}
               name="paidBy"
               render={({ field }) => (
+                // Paid by
                 <FormItem className="sm:order-5">
-                  <FormLabel>Paid by</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={getSelectedPayer(field)}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a participant" />
+                    <SelectTrigger className='text-4xl h-14'>
+                      <SelectValue placeholder="Paid By" />
                     </SelectTrigger>
                     <SelectContent>
                       {group.participants.map(({ id, name }) => (
-                        <SelectItem key={id} value={id}>
+                        <SelectItem className='text-2xl' key={id} value={id}>
                           {name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>
+                  {/* <FormDescription>
                     Select the participant who paid the expense.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
