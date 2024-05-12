@@ -185,7 +185,7 @@ export function ExpenseForm({
         }
       : searchParams.get('reimbursement')
       ? {
-          title: 'Reimbursement',
+          title: 'Payback',
           expenseDate: new Date(),
           amount: String(
             (Number(searchParams.get('amount')) || 0) / 100,
@@ -321,7 +321,7 @@ export function ExpenseForm({
                           />
                         </FormControl>
                         <div>
-                          <FormLabel>This is a reimbursement</FormLabel>
+                          <FormLabel>This is a payback</FormLabel>
                         </div>
                       </FormItem>
                     )}
