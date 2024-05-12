@@ -285,30 +285,6 @@ export function ExpenseForm({
 
             <FormField
               control={form.control}
-              name="expenseDate"
-              render={({ field }) => (
-                <FormItem className="sm:order-1">
-                  <FormLabel>Expense date</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="date-base"
-                      type="date"
-                      defaultValue={formatDate(field.value)}
-                      onChange={(event) => {
-                        return field.onChange(new Date(event.target.value))
-                      }}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Enter the date the expense was made.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="amount"
               render={({ field: { onChange, ...field } }) => (
                 <FormItem className="sm:order-3">
@@ -353,29 +329,6 @@ export function ExpenseForm({
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem className="order-3 sm:order-2">
-                  <FormLabel>Category</FormLabel>
-                  <CategorySelector
-                    categories={categories}
-                    defaultValue={
-                      form.watch(field.name) // may be overwritten externally
-                    }
-                    onValueChange={field.onChange}
-                    isLoading={isCategoryLoading}
-                  />
-                  <FormDescription>
-                    Select the expense category.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="paidBy"
@@ -404,20 +357,95 @@ export function ExpenseForm({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem className="sm:order-6">
-                  <FormLabel>Notes</FormLabel>
-                  <FormControl>
-                    <Textarea className="text-base" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+
+            <Collapsible
+              className="mt-5"
+              defaultOpen={form.getValues().splitMode !== 'EVENLY'}
+            >
+              <CollapsibleTrigger asChild>
+                <Button variant="link" className="-mx-4">
+                  Advanced expense options…
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <FormField
+                  control={form.control}
+                  name="expenseDate"
+                  render={({ field }) => (
+                    <FormItem className="sm:order-1">
+                      <FormLabel>Expense date</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="date-base"
+                          type="date"
+                          defaultValue={formatDate(field.value)}
+                          onChange={(event) => {
+                            return field.onChange(new Date(event.target.value))
+                          }}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Enter the date the expense was made.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="notes"
+                  render={({ field }) => (
+                    <FormItem className="sm:order-6">
+                      <FormLabel>Notes</FormLabel>
+                      <FormControl>
+                        <Textarea className="text-base" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem className="order-3 sm:order-2">
+                      <FormLabel>Category</FormLabel>
+                      <CategorySelector
+                        categories={categories}
+                        defaultValue={
+                          form.watch(field.name) // may be overwritten externally
+                        }
+                        onValueChange={field.onChange}
+                        isLoading={isCategoryLoading}
+                      />
+                      <FormDescription>
+                        Select the expense category.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CollapsibleContent>
+            </Collapsible>
+
           </CardContent>
         </Card>
+
+        <div className="flex mt-4 gap-2 text-center">
+          <Button variant="ghost" asChild>
+            <Link href={`/groups/${group.id}`}>Cancel</Link>
+          </Button>
+          <SubmitButton
+            loadingContent={isCreate ? <>Creating…</> : <>Saving…</>}
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {isCreate ? <>Create</> : <>Save</>}
+          </SubmitButton>
+          {!isCreate && onDelete && (
+            <DeletePopup onDelete={onDelete}></DeletePopup>
+          )}
+        </div>
 
         <Card className="mt-4">
           <CardHeader>
@@ -710,20 +738,6 @@ export function ExpenseForm({
           </Card>
         )}
 
-        <div className="flex mt-4 gap-2">
-          <SubmitButton
-            loadingContent={isCreate ? <>Creating…</> : <>Saving…</>}
-          >
-            <Save className="w-4 h-4 mr-2" />
-            {isCreate ? <>Create</> : <>Save</>}
-          </SubmitButton>
-          {!isCreate && onDelete && (
-            <DeletePopup onDelete={onDelete}></DeletePopup>
-          )}
-          <Button variant="ghost" asChild>
-            <Link href={`/groups/${group.id}`}>Cancel</Link>
-          </Button>
-        </div>
       </form>
     </Form>
   )
